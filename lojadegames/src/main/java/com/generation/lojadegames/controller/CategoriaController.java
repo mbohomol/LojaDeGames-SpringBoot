@@ -44,8 +44,8 @@ public class CategoriaController {
 		
 	@GetMapping("/tipo/{tipo}")
 	public ResponseEntity <List<Categoria>>getByTipo(@PathVariable String tipo){
-		return ResponseEntity.ok(categoriaRepository.findAllByTituloContainingIgnoreCase(tipo)); 
-		}
+		return ResponseEntity.ok(categoriaRepository.findAllByTipoContainingIgnoreCase(tipo));	
+	}
 
 	@PostMapping
 	public ResponseEntity <Categoria> postCategoria(@Valid @RequestBody Categoria categoria){
@@ -54,7 +54,10 @@ public class CategoriaController {
 	
 	@PutMapping
 	public ResponseEntity <Categoria> putCategoria(@Valid @RequestBody Categoria categoria){
-		return ResponseEntity.status(HttpStatus.OK).body(categoriaRepository.save(categoria));
+		
+		return categoriaRepository.findById(categoria.getId())
+				.map(resposta -> ResponseEntity.ok().body(categoriaRepository.save(categoria)))
+				.orElse(ResponseEntity.notFound().build());
 	}
 	@DeleteMapping("/{id}")
 	public void deleteCategoria(@PathVariable Long id) {

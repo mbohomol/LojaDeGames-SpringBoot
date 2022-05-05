@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.generation.lojadegames.model.Produto;
+import com.generation.lojadegames.repository.CategoriaRepository;
 import com.generation.lojadegames.repository.ProdutoRepository;
 
 @RestController //diz que é uma classe controladora Rest
@@ -28,6 +29,8 @@ public class ProdutoController {
 	
 	@Autowired
 	private ProdutoRepository produtoRepository; // acessa todos os métodos da Interface/Repository
+	@Autowired
+	private CategoriaRepository categoriaRepository;
 	
 	@GetMapping // para saber que esta chamando uma requisição, metódo que responde a requisição
 	public ResponseEntity<List<Produto>> getAll(){ //por issso que tem que criar uma classe "Postagens", para poder importar
@@ -43,17 +46,27 @@ public class ProdutoController {
 		
 	@GetMapping("/nome/{nome}")
 	public ResponseEntity<List<Produto>> getByNome(@PathVariable String nome){
-		return ResponseEntity.ok(produtoRepository.findAllByTituloContainingIgnoreCase(nome));
+		return ResponseEntity.ok(produtoRepository.findAllByNomeContainingIgnoreCase(nome));
 		}
 
 	@PostMapping
 	public ResponseEntity <Produto> postProduto(@Valid @RequestBody Produto produto){
-		return ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto));		
+		return categoriaRepository.findById(produto.getCategoria().getId())
+				.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(produtoRepository.save(produto)))
+				.orElse(ResponseEntity.badRequest().build());		
 	}
 	
 	@PutMapping
 	public ResponseEntity <Produto> putProduto(@Valid @RequestBody Produto produto){
-		return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto));
+		
+	if (produtoRepository.existsById(produto.getId())){
+
+		return categoriaRepository.findById(produto.getCategoria().getId())
+				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto)))
+				.orElse(ResponseEntity.badRequest().build());
+	}		
+	
+	return ResponseEntity.notFound().build();
 	}
 	@DeleteMapping("/{id}")
 	public void deleteProduto(@PathVariable Long id) {

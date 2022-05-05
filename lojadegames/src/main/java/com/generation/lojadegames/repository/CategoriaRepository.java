@@ -10,6 +10,6 @@ import com.generation.lojadegames.model.Categoria;
 @Repository //criação de uma interface "Repository"
 public interface CategoriaRepository extends JpaRepository <Categoria, Long>{
 
-	public List <Categoria> findAllByTituloContainingIgnoreCase(String tipo);  // acessa o banco de dados e busca informações // interage com o banco de dados
+	public List <Categoria> findAllByTipoContainingIgnoreCase(String tipo);  // acessa o banco de dados e busca informações // interage com o banco de dados
 }
 
