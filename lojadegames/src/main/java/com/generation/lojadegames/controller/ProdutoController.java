@@ -22,7 +22,7 @@ import com.generation.lojadegames.model.Produto;
 import com.generation.lojadegames.repository.ProdutoRepository;
 
 @RestController //diz que é uma classe controladora Rest
-@RequestMapping("/produto") // mapeia os endpoints, para receber requisições 
+@RequestMapping("/produto") 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProdutoController {
 	

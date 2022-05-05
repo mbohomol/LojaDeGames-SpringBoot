@@ -23,7 +23,7 @@ import com.generation.lojadegames.repository.CategoriaRepository;
 
 
 @RestController //diz que é uma classe controladora Rest
-@RequestMapping("/categoria") // mapeia os endpoints, para receber requisições 
+@RequestMapping("/categoria") 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CategoriaController {
 
